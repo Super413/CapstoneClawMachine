@@ -74,28 +74,6 @@ Key behavior modules:
   4. Return X/Y to software zero.
   5. Open claw.
 
-### Build / Flash Workflow
-#### Prerequisites
-- Arduino IDE **2.x** (recommended), or Arduino CLI.
-- Arduino board package matching your MCU (`[FILL IN: board family/model]`).
-- `Servo` library (standard Arduino library).
-- USB data cable and serial access to board.
-
-#### Arduino IDE Steps
-1. Open `Claw_Code.ino` in Arduino IDE.
-2. Select:
-   - **Board:** `[FILL IN: exact board name]`
-   - **Port:** `[FILL IN: serial port]`
-3. Click **Verify**.
-4. Click **Upload**.
-5. Open Serial Monitor at **9600 baud**.
-
-#### Arduino CLI (optional)
-```bash
-arduino-cli compile --fqbn <your-fqbn> Claw_Code.ino
-arduino-cli upload -p <your-port> --fqbn <your-fqbn> Claw_Code.ino
-```
-Replace placeholders with your actual board FQBN and serial port.
 
 ### Serial Output / Debugging
 Startup banner confirms control mappings and initial position report.
@@ -116,7 +94,7 @@ You can tune behavior directly in constants near the top of `Claw_Code.ino`:
 - `thresholdHigh`, `thresholdLow`, `releaseHigh`, `releaseLow` — joystick feel/jitter tolerance.
 - `returnDelay` — speed for return-to-zero moves.
 - Z movement count (`180` steps down/up loops in `runClawSequence()`).
-- Servo open/close angles:
+- Servo open/close angles (require a lot of tuning!):
   - `LEFT_OPEN`, `LEFT_CLOSED`
   - `RIGHT_OPEN`, `RIGHT_CLOSED`
 
@@ -127,32 +105,21 @@ You can tune behavior directly in constants near the top of `Claw_Code.ino`:
 - No fault detection for missed steps/stalls.
 - Z axis depth is fixed step count per cycle (not sensor-verified).
 
-### Suggested Next Development Tasks
-- Add hard/soft travel limits.
-- Add configurable settings block (or EEPROM-backed calibration).
-- Add acceleration/ramping for smoother motion.
-- Add non-blocking sequence timing (replace long blocking loops/delays).
-- Add serial command interface for calibration/testing without joystick.
-
----
-
 ## Physical Parts
 
-> This section is intentionally pre-filled from software evidence where possible, with blanks for unknown hardware specifics.
 
 ### Core Electronics
-- Microcontroller board: **[FILL IN: exact Arduino-compatible board]**
+- Microcontroller board: **Arduino Uno**
 - CNC Shield (uses classic `STEP/DIR/EN` pin pattern mapped in firmware)
-- Stepper drivers: **[FILL IN: driver type, e.g., A4988/DRV8825/TMCxxxx]**
+- Stepper drivers: **A4988**
 - Joystick module with analog X/Y + momentary switch
 - Additional momentary pushbutton (wired to `D12` with pull-up logic)
-- 2x servo motors for claw actuation
+- 2x servos for claw actuation
 
 ### Motion System
 - 2x NEMA 17 stepper motors for XY gantry
 - 1x stepper motor for Z lift
 - Gantry mechanism style: **H-bot style coordinated XY stepping (software behavior)**
-- Belts/pulleys/lead screw details: **[FILL IN]**
 
 ### Wiring Map (from firmware)
 - Joystick VRx -> `A0`
@@ -165,21 +132,3 @@ You can tune behavior directly in constants near the top of `Claw_Code.ino`:
 - Y STEP/DIR   -> `D4` / `D7`
 - Z STEP/DIR   -> `D3` / `D6`
 - Driver EN    -> `D8`
-
-### Power
-- Logic supply (Arduino/USB): **[FILL IN]**
-- Motor supply voltage/current: **[FILL IN]**
-- Servo supply voltage/current: **[FILL IN]**
-- Grounding/common ground scheme: **[FILL IN]**
-
-### Mechanical / Build
-- Frame/chassis material: **[FILL IN]**
-- Claw mechanism details: **[FILL IN]**
-- Prize chute location reference: **software zero position**
-- Estimated work envelope (X/Y/Z travel): **[FILL IN]**
-
-### Recommended Documentation to Add
-- Photos of wiring and controller stack
-- Driver current limit settings
-- Exact BOM with part numbers and links
-- Calibration notes (servo angles, Z travel, safe XY bounds)
